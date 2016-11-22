@@ -3235,14 +3235,14 @@ var util = Object.freeze({
 function initUse (Vue) {
   Vue.use = function (plugin) {
     /* istanbul ignore if */
-    if (plugin.installed) {
+    if (plugin.installed) { // su: install once
       return
     }
     // additional parameters
     var args = toArray(arguments, 1);
     args.unshift(this);
     if (typeof plugin.install === 'function') {
-      plugin.install.apply(plugin, args);
+      plugin.install.apply(plugin, args); // su: first arg is Vue
     } else {
       plugin.apply(null, args);
     }
@@ -3437,7 +3437,7 @@ function initGlobalAPI (Vue) {
   initAssetRegisters(Vue);
 }
 
-initGlobalAPI(Vue$3);
+initGlobalAPI(Vue$3); // su: You r awesome
 
 Object.defineProperty(Vue$3.prototype, '$isServer', {
   get: function () { return config._isServer; }
@@ -3551,6 +3551,7 @@ function stringifyClass (value) {
   if (typeof value === 'string') {
     return value
   }
+  // su: array of classes
   if (Array.isArray(value)) {
     var stringified;
     for (var i = 0, l = value.length; i < l; i++) {
@@ -3562,11 +3563,12 @@ function stringifyClass (value) {
     }
     return res.slice(0, -1)
   }
+  // su: class object
   if (isObject(value)) {
     for (var key in value) {
       if (value[key]) { res += key + ' '; }
     }
-    return res.slice(0, -1)
+    return res.slice(0, -1) // su: 
   }
   /* istanbul ignore next */
   return res
