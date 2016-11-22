@@ -11,7 +11,7 @@ export const arrayMethods = Object.create(arrayProto)
 /**
  * Intercept mutating methods and emit events
  */
-;[
+[
   'push',
   'pop',
   'shift',
@@ -32,8 +32,11 @@ export const arrayMethods = Object.create(arrayProto)
       args[i] = arguments[i]
     }
     const result = original.apply(this, args)
-    const ob = this.__ob__
+    const ob = this.__ob__ // ?? from where this comes
     let inserted
+
+    // if any of the following methods were called 
+    // call ob.observeArray(inserted)
     switch (method) {
       case 'push':
         inserted = args

@@ -1,12 +1,19 @@
 import config from '../config'
 import { noop } from 'shared/util'
 
+/**
+ *
+ * su: Simple warning system for vuejs
+ *
+ */
+
 let warn = noop
 let formatComponentName
 
 if (process.env.NODE_ENV !== 'production') {
   const hasConsole = typeof console !== 'undefined'
 
+  // su: Simple warning system
   warn = (msg, vm) => {
     if (hasConsole && (!config.silent)) {
       console.error(`[Vue warn]: ${msg} ` + (
@@ -20,7 +27,7 @@ if (process.env.NODE_ENV !== 'production') {
       return 'root instance'
     }
     const name = vm._isVue
-      ? vm.$options.name || vm.$options._componentTag
+      ? vm.$options.name || vm.$options._componentTag // give detailed warning
       : vm.name
     return (
       (name ? `component <${name}>` : `anonymous component`) +

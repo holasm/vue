@@ -74,9 +74,9 @@ export function isPrimitive (value: any): boolean {
  * Create a cached version of a pure function.
  */
 export function cached (fn: Function): Function {
-  const cache = Object.create(null)
+  const cache = Object.create(null) // su: function specific cached store
   return function cachedFn (str: string): any {
-    const hit = cache[str]
+    const hit = cache[str] // if the string is processed before
     return hit || (cache[str] = fn(str))
   }
 }
@@ -84,7 +84,7 @@ export function cached (fn: Function): Function {
 /**
  * Camelize a hyphen-delmited string.
  */
-const camelizeRE = /-(\w)/g
+const camelizeRE = /-(\w)/g // my{-b}adass, the{-s}haggy{-d}og
 export const camelize = cached((str: string): string => {
   return str.replace(camelizeRE, (_, c) => c ? c.toUpperCase() : '')
 })
@@ -99,7 +99,7 @@ export const capitalize = cached((str: string): string => {
 /**
  * Hyphenate a camelCase string.
  */
-const hyphenateRE = /([^-])([A-Z])/g
+const hyphenateRE = /([^-])([A-Z])/g // any capital lettet not - beforehand
 export const hyphenate = cached((str: string): string => {
   return str
     .replace(hyphenateRE, '$1-$2')
@@ -214,6 +214,7 @@ export function looseEqual (a: mixed, b: mixed): boolean {
 
 export function looseIndexOf (arr: Array<mixed>, val: mixed): number {
   for (let i = 0; i < arr.length; i++) {
+    // su: compare stringfied valye
     if (looseEqual(arr[i], val)) return i
   }
   return -1

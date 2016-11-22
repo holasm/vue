@@ -92,7 +92,7 @@ function genConfig (opts) {
     banner: opts.banner,
     moduleName: 'Vue',
     plugins: [
-      flow(),
+      flow(), // su:Check the argument type
       buble(),
       alias(Object.assign({}, require('./alias'), opts.alias))
     ]

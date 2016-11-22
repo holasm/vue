@@ -9,8 +9,8 @@ import {
 } from '../util/index'
 
 const queue: Array<Watcher> = []
-let has: { [key: number]: ?true } = {}
-let circular: { [key: number]: number } = {}
+let has: { [key: number]: ?true } = {} // su: key will be numbers only, value willbe true or false
+let circular: { [key: number]: number } = {} // su: used for warning
 let waiting = false
 let flushing = false
 let index = 0
@@ -18,7 +18,7 @@ let index = 0
 /**
  * Reset the scheduler's state.
  */
-function resetSchedulerState () {
+function resetSchedulerState () { // su: allow 
   queue.length = 0
   has = {}
   if (process.env.NODE_ENV !== 'production') {
@@ -31,7 +31,7 @@ function resetSchedulerState () {
  * Flush both queues and run the watchers.
  */
 function flushSchedulerQueue () {
-  flushing = true
+  flushing = true // 
 
   // Sort queue before flush.
   // This ensures that:
@@ -49,7 +49,7 @@ function flushSchedulerQueue () {
     const watcher = queue[index]
     const id = watcher.id
     has[id] = null
-    watcher.run()
+    watcher.run() // su: ****
     // in dev build, check and stop circular updates.
     if (process.env.NODE_ENV !== 'production' && has[id] != null) {
       circular[id] = (circular[id] || 0) + 1
@@ -88,7 +88,7 @@ export function queueWatcher (watcher: Watcher) {
     if (!flushing) {
       queue.push(watcher)
     } else {
-      // if already flushing, splice the watcher based on its id
+      // if already flushing, splice the watcher based on its id #su: ??
       // if already past its id, it will be run next immediately.
       let i = queue.length - 1
       while (i >= 0 && queue[i].id > watcher.id) {
@@ -96,7 +96,7 @@ export function queueWatcher (watcher: Watcher) {
       }
       queue.splice(Math.max(i, index) + 1, 0, watcher)
     }
-    // queue the flush
+    // su: flush the queue 
     if (!waiting) {
       waiting = true
       nextTick(flushSchedulerQueue)

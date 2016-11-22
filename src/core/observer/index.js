@@ -45,7 +45,7 @@ export class Observer {
       const augment = hasProto
         ? protoAugment
         : copyAugment
-      augment(value, arrayMethods, arrayKeys)
+      augment(value, arrayMethods, arrayKeys) // su: if array? attatch arrayMethods
       this.observeArray(value)
     } else {
       this.walk(value)
@@ -60,7 +60,7 @@ export class Observer {
   walk (obj: Object) {
     const keys = Object.keys(obj)
     for (let i = 0; i < keys.length; i++) {
-      defineReactive(obj, keys[i], obj[keys[i]])
+      defineReactive(obj, keys[i], obj[keys[i]]) // obj, k, v:
     }
   }
 
@@ -126,6 +126,12 @@ export function observe (value: any): Observer | void {
 /**
  * Define a reactive property on an Object.
  */
+ /**
+  *
+  * su: This the reactive HEART
+  *
+  */
+ 
 export function defineReactive (
   obj: Object,
   key: string,
@@ -135,7 +141,7 @@ export function defineReactive (
   const dep = new Dep()
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
-  if (property && property.configurable === false) {
+  if (property && property.configurable === false) { // su: non configurable? key
     return
   }
 
@@ -155,7 +161,7 @@ export function defineReactive (
           childOb.dep.depend()
         }
         if (Array.isArray(value)) {
-          dependArray(value)
+          dependArray(value) // su: 
         }
       }
       return value
@@ -239,7 +245,7 @@ export function del (obj: Object, key: string) {
  * Collect dependencies on array elements when the array is touched, since
  * we cannot intercept array element access like property getters.
  */
-function dependArray (value: Array<any>) {
+function dependArray (value: Array<any>) { //su: 
   for (let e, i = 0, l = value.length; i < l; i++) {
     e = value[i]
     e && e.__ob__ && e.__ob__.dep.depend()

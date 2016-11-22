@@ -4,9 +4,12 @@
  * Released under the MIT License.
  */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
-  typeof define === 'function' && define.amd ? define(factory) :
-  (global.Vue = factory());
+
+  typeof exports === 'object' && typeof module !== 'undefined' ? 
+    module.exports = factory() :
+    typeof define === 'function' && define.amd ? // as amd module 
+      define(factory) : // 
+      (global.Vue = factory()); // old school window.Vue = factory()
 }(this, (function () { 'use strict';
 
 /*  */
@@ -981,6 +984,13 @@ var observerState = {
   isSettingProps: false
 };
 
+
+/**
+ *
+ * su: Learn how observers work
+ *
+ */
+
 /**
  * Observer class that are attached to each observed
  * object. Once attached, the observer converts target
@@ -1068,7 +1078,7 @@ function observe (value) {
     Object.isExtensible(value) &&
     !value._isVue
   ) {
-    ob = new Observer(value);
+    ob = new Observer(value); // su: 
   }
   return ob
 }
@@ -1221,7 +1231,7 @@ function initProps (vm) {
     // root instance props should be converted
     observerState.shouldConvert = isRoot;
     var loop = function ( i ) {
-      var key = keys[i];
+      var key = keys[i]; // su: get the prop name
       /* istanbul ignore else */
       {
         if (isReservedProp(key)) {
@@ -2980,10 +2990,10 @@ function mergeOptions (
  * to assets defined in its ancestor chain.
  */
 function resolveAsset (
-  options,
+  options, // su: options[type] gives the assets
   type,
   id,
-  warnMissing
+  warnMissing // su: Bool?
 ) {
   /* istanbul ignore if */
   if (typeof id !== 'string') {
@@ -7922,6 +7932,6 @@ function getOuterHTML (el) {
 
 Vue$3.compile = compileToFunctions;
 
-return Vue$3;
+return Vue$3; // return as 
 
 })));

@@ -86,15 +86,19 @@ export const nextTick = (function () {
     }
   }
 
+  /* su: This becomes the $nextTick(fn: Function) */
   return function queueNextTick (cb?: Function, ctx?: Object) {
     let _resolve
+
+    // bind the context and push in queue
     callbacks.push(() => {
       if (cb) cb.call(ctx)
-      if (_resolve) _resolve(ctx)
+      if (_resolve) _resolve(ctx) // su: ??
     })
+
     if (!pending) {
-      pending = true
-      timerFunc()
+      pending = true // su: lock for releasing all pending callbacks
+      timerFunc() // su: release all the pending callbacks
     }
     if (!cb && typeof Promise !== 'undefined') {
       return new Promise(resolve => {
@@ -112,7 +116,7 @@ if (typeof Set !== 'undefined' && isNative(Set)) {
 } else {
   // a non-standard Set polyfill that only works with primitive keys.
   _Set = class Set {
-    set: Object;
+    set: Object; // su: the local store
     constructor () {
       this.set = Object.create(null)
     }
@@ -123,7 +127,7 @@ if (typeof Set !== 'undefined' && isNative(Set)) {
       this.set[key] = 1
     }
     clear () {
-      this.set = Object.create(null)
+      this.set = Object.create(null) // su: reset the local store
     }
   }
 }

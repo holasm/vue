@@ -1,6 +1,6 @@
 /* @flow */
 
-import type Watcher from './watcher'
+import type Watcher from './watcher' // no circular deps. only used for type checking
 import { remove } from '../util/index'
 
 let uid = 0
@@ -12,10 +12,10 @@ let uid = 0
 export default class Dep {
   static target: ?Watcher;
   id: number;
-  subs: Array<Watcher>;
+  subs: Array<Watcher>; // all the subscribers
 
   constructor () {
-    this.id = uid++
+    this.id = uid++ // uid is always unique
     this.subs = []
   }
 
@@ -27,6 +27,7 @@ export default class Dep {
     remove(this.subs, sub)
   }
 
+  // ??
   depend () {
     if (Dep.target) {
       Dep.target.addDep(this)
@@ -45,8 +46,10 @@ export default class Dep {
 // the current target watcher being evaluated.
 // this is globally unique because there could be only one
 // watcher being evaluated at any time.
+
+// ??
 Dep.target = null
-const targetStack = []
+const targetStack = [] // all watches hoes here
 
 export function pushTarget (_target: Watcher) {
   if (Dep.target) targetStack.push(Dep.target)

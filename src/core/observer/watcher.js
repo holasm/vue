@@ -38,7 +38,7 @@ export default class Watcher {
 
   constructor (
     vm: Component,
-    expOrFn: string | Function,
+    expOrFn: string | Function, // su: string or function
     cb: Function,
     options?: Object = {}
   ) {
@@ -79,15 +79,16 @@ export default class Watcher {
   }
 
   /**
-   * Evaluate the getter, and re-collect dependencies.
+   * Evaluate the getter, 
+   * and re-collect dependencies.
    */
   get () {
     pushTarget(this)
-    const value = this.getter.call(this.vm, this.vm)
+    const value = this.getter.call(this.vm, this.vm) // su: get the value from vm instance
     // "touch" every property so they are all tracked as
     // dependencies for deep watching
     if (this.deep) {
-      traverse(value)
+      traverse(value) // traverse the value object deeply
     }
     popTarget()
     this.cleanupDeps()
@@ -150,7 +151,7 @@ export default class Watcher {
    */
   run () {
     if (this.active) {
-      const value = this.get()
+      const value = this.get() // su: get the new value
       if (
         value !== this.value ||
         // Deep watchers and watchers on Object/Arrays should fire even
@@ -160,11 +161,11 @@ export default class Watcher {
         this.deep
       ) {
         // set new value
-        const oldValue = this.value
-        this.value = value
+        const oldValue = this.value // oldVal
+        this.value = value // newVal 
         if (this.user) {
           try {
-            this.cb.call(this.vm, value, oldValue)
+            this.cb.call(this.vm, value, oldValue) // su: ***
           } catch (e) {
             process.env.NODE_ENV !== 'production' && warn(
               `Error in watcher "${this.expression}"`,
@@ -199,7 +200,7 @@ export default class Watcher {
   depend () {
     let i = this.deps.length
     while (i--) {
-      this.deps[i].depend()
+      this.deps[i].depend() // add dep to current target
     }
   }
 
@@ -217,7 +218,7 @@ export default class Watcher {
       }
       let i = this.deps.length
       while (i--) {
-        this.deps[i].removeSub(this)
+        this.deps[i].removeSub(this) // su: unsubscribe to all deps
       }
       this.active = false
     }
@@ -246,7 +247,7 @@ function _traverse (val: any, seen: Set) {
     if (seen.has(depId)) {
       return
     }
-    seen.add(depId)
+    seen.add(depId) // if not seen before add to seen
   }
   if (isA) {
     i = val.length
